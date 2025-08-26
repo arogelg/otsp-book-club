@@ -31,7 +31,7 @@
         <!-- Book cards will be injected here by script.js -->
       </div>
     </section>
-    <section class="section form-container"
+    <section class="section form-container">
       <h2>Add Your Current Book</h2>
       <form id="addBookForm">
         <div class="form-group">
@@ -81,42 +81,5 @@
   <footer>
     <p>&copy; <span id="year"></span> On The Same Page Book Club</p>
   </footer>
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    if (window.netlifyIdentity) {
-      netlifyIdentity.init();
-      netlifyIdentity.on('login', async (user) => {
-        try { await fetch('/.netlify/functions/user-upsert'); } catch (e) {}
-        window.location.reload();
-      });
-      netlifyIdentity.on('logout', () => window.location.reload());
-    }
-  });
-  </script>
-
-  <script>
-  function setAuthUI(user){
-    const reqEls = document.querySelectorAll('[data-auth="required"]');
-    const guestEls = document.querySelectorAll('[data-auth="guest"]');
-    const chip = document.getElementById('user-chip');
-    const login = document.getElementById('login-btn');
-    const logout = document.getElementById('logout-btn');
-    if(user){
-      chip.textContent = user.user_metadata?.full_name || user.email;
-      chip.style.display = 'inline-block'; login.style.display='none'; logout.style.display='inline-block';
-      reqEls.forEach(e=>e.style.display=''); guestEls.forEach(e=>e.style.display='none');
-    }else{
-      chip.style.display='none'; login.style.display='inline-block'; logout.style.display='none';
-      reqEls.forEach(e=>e.style.display='none'); guestEls.forEach(e=>e.style.display='');
-    }
-  }
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const u = window.netlifyIdentity?.currentUser(); setAuthUI(u);
-    document.getElementById('login-btn')?.addEventListener('click', ()=> netlifyIdentity.open('login'));
-    document.getElementById('logout-btn')?.addEventListener('click', ()=> netlifyIdentity.logout());
-    netlifyIdentity?.on('login', async (user)=>{ await fetch('/.netlify/functions/user-upsert'); setAuthUI(user); location.reload(); });
-    netlifyIdentity?.on('logout', ()=>{ setAuthUI(null); location.reload(); });
-  });
-  </script>
 </body>
 </html>
