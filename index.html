@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>On The Same Page Book Club</title>
-  <!-- Preconnect for Google Fonts -->
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script> <!-- ONE time -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Load custom fonts: Fraunces (display) and Inter (body) -->
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script defer src="script.js"></script>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body class="page-home fade-in">
   <header>
@@ -23,6 +22,13 @@
     <nav>
       <a href="index.html" class="active">Home</a>
       <a href="books.html">Book Tracker</a>
+
+      <!-- Auth menu -->
+      <div id="auth-ui" style="margin-left:auto;display:flex;gap:.5rem;align-items:center">
+        <span id="user-chip" style="display:none;padding:.25rem .6rem;border:1px solid #cbb89e;border-radius:999px;background:#efe7db;"></span>
+        <button id="login-btn" class="btn">Log in / Sign up</button>
+        <button id="logout-btn" class="btn" style="display:none">Log out</button>
+      </div>
     </nav>
   </header>
   <main>
@@ -43,5 +49,26 @@
   <footer>
     <p>&copy; <span id="year"></span> On The Same Page Book Club</p>
   </footer>
+<!-- Init Identity -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      function setAuthUI(user){
+        const chip=document.getElementById('user-chip');
+        const login=document.getElementById('login-btn');
+        const logout=document.getElementById('logout-btn');
+        if(user){ chip.textContent=user.user_metadata?.full_name||user.email;
+          chip.style.display='inline-block'; login.style.display='none'; logout.style.display='inline-block';
+        } else { chip.style.display='none'; login.style.display='inline-block'; logout.style.display='none'; }
+      }
+      if(window.netlifyIdentity){
+        netlifyIdentity.init();
+        setAuthUI(netlifyIdentity.currentUser());
+        netlifyIdentity.on('login', async (u)=>{ try{await fetch('/.netlify/functions/user-upsert');}catch{} setAuthUI(u); location.reload(); });
+        netlifyIdentity.on('logout', ()=>{ setAuthUI(null); location.reload(); });
+      }
+      document.getElementById('login-btn')?.addEventListener('click', ()=> netlifyIdentity.open('login'));
+      document.getElementById('logout-btn')?.addEventListener('click', ()=> netlifyIdentity.logout());
+    });
+  </script>
 </body>
 </html>
