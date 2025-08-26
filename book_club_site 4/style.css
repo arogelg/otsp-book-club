@@ -1,0 +1,336 @@
+/* Root variables for colors and fonts */
+:root {
+  /* new palette inspired by a cosy modern library */
+  --clr-espresso: #3B2F2A; /* dark espresso for text and deep accents */
+  --clr-caramel: #B97A57;  /* warm caramel for highlights and buttons */
+  --clr-sand: #F4E9DD;    /* soft sand background */
+  --clr-forest: #2E5E4E;  /* forest green accent for navigation */
+  --font-display: 'Fraunces', serif; /* elegant serif for headings */
+  --font-body: 'Inter', sans-serif;  /* clean sans serif for body */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background-color: var(--clr-sand);
+  color: var(--clr-espresso);
+  overflow-x: hidden;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: var(--clr-forest);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(6px);
+}
+
+/* wrap logo in a light badge so it stands out on dark nav */
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--clr-sand);
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* scale up logo slightly and allow it to fill its badge */
+.logo {
+  height: 60px;
+  width: auto;
+  margin-right: 0.5rem;
+}
+
+header h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+}
+
+nav a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding: 0.25rem 0;
+  transition: color 0.2s;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease-in-out;
+}
+
+nav a:hover::after,
+nav a.active::after {
+  transform: scaleX(1);
+}
+
+/* Hero section with grainy background and subtle gradient overlay */
+.hero {
+  position: relative;
+  background-image: url('assets/background.png');
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  padding: 6rem 2rem 5rem;
+  color: var(--clr-espresso);
+  isolation: isolate;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(244,233,221,0.8), rgba(244,233,221,0.85));
+  mix-blend-mode: multiply;
+  z-index: -1;
+}
+
+.hero h2 {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--clr-forest);
+}
+
+.hero p {
+  font-size: 1.25rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+/* Button styling */
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--clr-caramel);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+  background-color: var(--clr-forest);
+  transform: translateY(-2px);
+}
+
+ .section {
+  padding: 3rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.7;
+ }
+
+ .section h2 {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--clr-forest);
+ }
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--clr-forest);
+  color: #fff;
+}
+
+/* Book card styling */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 14px rgba(0, 0, 0, 0.15);
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background-color: var(--clr-sand);
+}
+
+.card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card .member {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--clr-caramel);
+}
+
+.card .title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0.25rem 0;
+  color: var(--clr-forest);
+}
+
+.card .genre {
+  font-style: italic;
+  color: var(--clr-caramel);
+  margin-bottom: 0.5rem;
+}
+
+.card .summary {
+  font-size: 0.9rem;
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.card .rating {
+  margin-top: 0.5rem;
+  color: var(--clr-forest);
+  font-size: 1rem;
+}
+
+.card .progress-bar-container {
+  position: relative;
+  background-color: #eae2d7;
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.card .progress-bar {
+  background-color: var(--clr-caramel);
+  height: 100%;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+.card .suggestions {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--clr-espresso);
+}
+
+/* Form styling */
+.form-container {
+  background-color: var(--clr-forest);
+  border-radius: 12px;
+  color: #fff;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.form-container h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-display);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group.buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  align-items: center;
+}
+
+.form-group button {
+  background-color: var(--clr-caramel);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.form-group button:hover {
+  background-color: var(--clr-forest);
+  transform: translateY(-2px);
+}
+
+.note {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  color: #e6dad0;
+}
+
+/* Fade animations */
+body.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.6s forwards;
+}
+
+body.fade-out {
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Tracker – On The Same Page</title>
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Load custom fonts: Fraunces (display) and Inter (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body class="page-books fade-in">
+  <header>
+    <div class="logo-wrapper">
+      <img src="assets/logo.png" alt="On The Same Page logo" class="logo" />
+      <h1>On The Same Page</h1>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="books.html" class="active">Book Tracker</a>
+    </nav>
+  </header>
+  <main>
+    <section class="section">
+      <h2>Current Reads</h2>
+      <div id="bookList" class="cards">
+        <!-- Book cards will be injected here by script.js -->
+      </div>
+    </section>
+    <section class="section form-container"
+      <h2>Add Your Current Book</h2>
+      <form id="addBookForm">
+        <div class="form-group">
+          <label for="memberName">Your name</label>
+          <input type="text" id="memberName" name="memberName" required placeholder="Enter your name" />
+        </div>
+        <div class="form-group">
+          <label for="bookTitle">Book title</label>
+          <input type="text" id="bookTitle" name="bookTitle" required placeholder="e.g., The Hobbit" />
+        </div>
+        <div class="form-group">
+          <label for="genre">Genre</label>
+          <input type="text" id="genre" name="genre" placeholder="e.g., Fantasy, Mystery, Romance" />
+        </div>
+        <div class="form-group">
+          <label for="summary">Short summary (optional)</label>
+          <textarea id="summary" name="summary" placeholder="What is this book about?"></textarea>
+        </div>
+        <!-- New fields for progress and rating -->
+        <div class="form-group">
+          <label for="progress">Progress (%)</label>
+          <input type="number" id="progress" name="progress" min="0" max="100" step="1" placeholder="e.g., 50" />
+        </div>
+        <div class="form-group">
+          <label for="rating">Rating (1–5)</label>
+          <select id="rating" name="rating">
+            <option value="">Select rating</option>
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="coverUrl">Cover image URL (optional)</label>
+          <input type="url" id="coverUrl" name="coverUrl" placeholder="If you have a link to the cover, paste it here" />
+        </div>
+        <div class="form-group buttons">
+          <button type="button" id="fetchInfoBtn">Fetch details</button>
+          <button type="submit">Add Book</button>
+        </div>
+      </form>
+      <p class="note">Tip: If you click "Fetch details", we'll try to look up the cover and summary using the Google Books API.</p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; <span id="year"></span> On The Same Page Book Club</p>
+  </footer>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.netlifyIdentity) {
+      netlifyIdentity.init();
+      netlifyIdentity.on('login', async (user) => {
+        try { await fetch('/.netlify/functions/user-upsert'); } catch (e) {}
+        window.location.reload();
+      });
+      netlifyIdentity.on('logout', () => window.location.reload());
+    }
+  });
+  </script>
+
+  <script>
+  function setAuthUI(user){
+    const reqEls = document.querySelectorAll('[data-auth="required"]');
+    const guestEls = document.querySelectorAll('[data-auth="guest"]');
+    const chip = document.getElementById('user-chip');
+    const login = document.getElementById('login-btn');
+    const logout = document.getElementById('logout-btn');
+    if(user){
+      chip.textContent = user.user_metadata?.full_name || user.email;
+      chip.style.display = 'inline-block'; login.style.display='none'; logout.style.display='inline-block';
+      reqEls.forEach(e=>e.style.display=''); guestEls.forEach(e=>e.style.display='none');
+    }else{
+      chip.style.display='none'; login.style.display='inline-block'; logout.style.display='none';
+      reqEls.forEach(e=>e.style.display='none'); guestEls.forEach(e=>e.style.display='');
+    }
+  }
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const u = window.netlifyIdentity?.currentUser(); setAuthUI(u);
+    document.getElementById('login-btn')?.addEventListener('click', ()=> netlifyIdentity.open('login'));
+    document.getElementById('logout-btn')?.addEventListener('click', ()=> netlifyIdentity.logout());
+    netlifyIdentity?.on('login', async (user)=>{ await fetch('/.netlify/functions/user-upsert'); setAuthUI(user); location.reload(); });
+    netlifyIdentity?.on('logout', ()=>{ setAuthUI(null); location.reload(); });
+  });
+  </script>
+</body>
+</html>
